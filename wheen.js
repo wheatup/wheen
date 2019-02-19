@@ -13,22 +13,20 @@ class Wheen {
 		this._lastUpdateTime = 0;
 		this._completed = false;
 		this._update = this._update.bind(this);
+		
+		this._class = null;
 
 		// Cocos Creater integration
 		if (typeof cc !== 'undefined' && cc.ENGINE_VERSION) {
 			let ud = this._update;
 			if (cc.Canvas.instance) {
 				try {
-					cc.Class({
-						name: '__Wheen__',
+					this._class = cc.Class({
 						extends: cc.Component,
-						start: function() {
-							console.log('cc integrated!');
-						},
 						update: ud
 					});
 
-					cc.Canvas.instance.node.addComponent('__Flick__');
+					cc.Canvas.instance.node.addComponent(this._class);
 				} catch (ex) {
 					console.error(ex);
 				}
@@ -75,9 +73,6 @@ class Wheen {
 	}
 
 	start() {
-		console.log(1);
-		console.log(cc.Canvas.instance.node);
-
 		if (!this.target) {
 			throw new Error('You have to assign the flick to a target!');
 		}
@@ -124,6 +119,9 @@ class Wheen {
 			let chain = this._tweenChain[this._chainIndex];
 			if (!chain) {
 				this._completed = true;
+				if(this._class){
+					cc.Canvas.instance.node.removeComponent(this._class);
+				}
 			} else {
 				switch (chain.type) {
 					case 'from':
