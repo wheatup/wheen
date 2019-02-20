@@ -172,7 +172,7 @@ class Wheen {
 
 		if (this._running && !this._completed) {
 			let chain = this._tweenChain[this._chainIndex];
-			if (!chain) {
+			if (!chain || !this.target || (this._integrated && this.target instanceof cc.Node && !this.target.isValid)) {
 				this.stop();
 			} else {
 				switch (chain.type) {
