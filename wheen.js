@@ -1,5 +1,3 @@
-let integrated = false;
-
 class Wheen {
 	constructor(target) {
 		if (target) {
@@ -12,9 +10,10 @@ class Wheen {
 		this._flags = {};
 		this._lastUpdateTime = 0;
 		this._completed = false;
-		this._update = this._update.bind(this);
-		
+		this._integrated = false;
 		this._class = null;
+
+		this._update = this._update.bind(this);
 
 		// Cocos Creater integration
 		if (typeof cc !== 'undefined' && cc.ENGINE_VERSION) {
@@ -27,17 +26,52 @@ class Wheen {
 					});
 
 					cc.Canvas.instance.node.addComponent(this._class);
+					this._integrated = true;
 				} catch (ex) {
 					console.error(ex);
 				}
-
-				integrated = true;
 			}
+		}
+	}
+
+	static stop(target) {
+		if (target.__wheens__) {
+			target.__wheens__.forEach(wheen => {
+				wheen.stop();
+			});
+		}
+	}
+
+	static pause(target) {
+		if (target.__wheens__) {
+			target.__wheens__.forEach(wheen => {
+				wheen.pause();
+			});
+		}
+	}
+
+	static resume(target) {
+		if (target.__wheens__) {
+			target.__wheens__.forEach(wheen => {
+				wheen.resume();
+			});
+		}
+	}
+
+	static start(target) {
+		if (target.__wheens__) {
+			target.__wheens__.forEach(wheen => {
+				wheen.start();
+			});
 		}
 	}
 
 	apply(target) {
 		this.target = target;
+		if (typeof target.__wheens__ === 'undefined' || !target.__wheens__) {
+			target.__wheens__ = [];
+		}
+		target.__wheens__.push(this);
 		return this;
 	}
 
@@ -74,7 +108,7 @@ class Wheen {
 
 	start() {
 		if (!this.target) {
-			throw new Error('You have to assign the flick to a target!');
+			throw new Error('You have to assign the animation to a target!');
 		}
 
 		this._chainIndex = 0;
@@ -88,26 +122,47 @@ class Wheen {
 			}
 		});
 
-		if (!integrated) {
+		if (!this._integrated) {
 			window.requestAnimationFrame(() => this._update());
 		}
+
+		return this;
 	}
 
 	pause() {
 		this._running = false;
+		return this;
 	}
 
 	resume() {
 		this._running = true;
+		return this;
 	}
 
 	stop() {
 		this._running = false;
 		this._completed = true;
+		this._remove();
+		if (this._class) {
+			cc.Canvas.instance.node.removeComponent(this._class);
+		}
+		return this;
+	}
+
+	_remove() {
+		if (this.target.__wheens__) {
+			let index = this.target.__wheens__.indexOf(this);
+			if (index > -1) {
+				this.target.__wheens__.splice(index, 1);
+			}
+			if (this.target.__wheens__.length <= 0) {
+				delete this.target.__wheens__;
+			}
+		}
 	}
 
 	_update(dt) {
-		if (integrated && dt) {
+		if (this._integrated && dt) {
 			dt *= 1000;
 		} else {
 			dt = new Date().getTime() - this._lastUpdateTime;
@@ -118,10 +173,7 @@ class Wheen {
 		if (this._running && !this._completed) {
 			let chain = this._tweenChain[this._chainIndex];
 			if (!chain) {
-				this._completed = true;
-				if(this._class){
-					cc.Canvas.instance.node.removeComponent(this._class);
-				}
+				this.stop();
 			} else {
 				switch (chain.type) {
 					case 'from':
@@ -212,7 +264,7 @@ class Wheen {
 		if (callImmediately) {
 			this._update();
 		} else if (!this._completed) {
-			if (!integrated) {
+			if (!this._integrated) {
 				window.requestAnimationFrame(() => this._update());
 			}
 		}
