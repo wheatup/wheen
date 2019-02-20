@@ -1,18 +1,22 @@
 {
-  "name": "wheen",
-  "version": "1.0.5",
-  "description": "",
-  "main": "wheen.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "tween",
-    "animation",
-    "cocos creator",
-    "lerp",
-    "animate"
-  ],
-  "author": "wheatup",
-  "license": "MIT"
+	"name": "wheen",
+	"version": "1.0.5",
+	"description": "",
+	"main": "wheen.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"tween",
+		"animation",
+		"cocos creator",
+		"lerp",
+		"animate"
+	],
+	"author": "wheatup",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wheatup/wheen.git"
+	}
 }
