@@ -16,19 +16,22 @@ class Wheen {
 		this._update = this._update.bind(this);
 
 		// Cocos Creater integration
-		if (typeof cc !== 'undefined' && cc.ENGINE_VERSION) {
-			let ud = this._update;
-			if (cc.Canvas.instance) {
-				try {
-					this._class = cc.Class({
-						extends: cc.Component,
-						update: ud
-					});
+		if (typeof window !== 'undefined') {
+			let cc = window.cc;
+			if (typeof cc !== 'undefined' && cc.ENGINE_VERSION) {
+				let ud = this._update;
+				if (cc.Canvas.instance) {
+					try {
+						this._class = cc.Class({
+							extends: cc.Component,
+							update: ud
+						});
 
-					cc.Canvas.instance.node.addComponent(this._class);
-					this._integrated = true;
-				} catch (ex) {
-					console.error(ex);
+						cc.Canvas.instance.node.addComponent(this._class);
+						this._integrated = true;
+					} catch (ex) {
+						console.error(ex);
+					}
 				}
 			}
 		}
@@ -231,13 +234,18 @@ class Wheen {
 							// reset the children's states
 							for (let i = backtrack; i < this._chainIndex; i++) {
 								let _chain = this._tweenChain[i];
+								let _forWechat = _chain.elapsedTime;
 								if (_chain.type === 'loop') {
 									_chain.currentLap = 0;
 								} else if (_chain.type === 'wait') {
 									_chain.elapsedTime = 0;
 								} else if (_chain.type === 'to') {
 									_chain.elapsedTime = 0;
-									_chain.org = undefined;
+									delete _chain.org;
+								}
+								// For some fucking reason, if you don't add this statement, loop will not work in WeChat Minigames.
+								if (_forWechat) {
+									_forWechat.toString();
 								}
 							}
 							this._chainIndex = backtrack;
