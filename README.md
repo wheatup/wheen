@@ -4,6 +4,8 @@ A lite-weight animation solution.
 
 Integrated with Cocos Creator.
 
+Even possible to tween nested attributes!
+
 ### Usage
 
 ```javascript
@@ -33,8 +35,10 @@ let wheen = new Wheen(obj)
 	.to({scaleX: 1, scaleY: 1}, 50, Wheen.Easing.Cubic.easeOut)
 	// Loop from 'START' point, twice
 	.loop(2, 'START')
+	// Calls every frame while the tween is running
+	.on('update', args => console.log('Current args', args))
 	// Finish callback
-	.callFunc(function(){console.log(`Finished at ${this.x}!`)}, obj);
+	.on('finish', function(){ console.log(`Finished at ${this.x}!`); }, obj)
 	
 // Start the animation
 wheen.start();

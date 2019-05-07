@@ -488,7 +488,6 @@ function _get(target, attr) {
 			}
 			depth++;
 		}
-		console.log(current);
 		return current;
 	} else {
 		return target[attr];
