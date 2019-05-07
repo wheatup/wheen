@@ -109,6 +109,14 @@ class Wheen {
 		return this;
 	}
 
+	on(event, func, self) {
+		if (!this._events) {
+			this._events = {};
+		}
+		this._events[event] = { func, self };
+		return this;
+	}
+
 	start() {
 		if (!this.target) {
 			throw new Error('You have to assign the animation to a target!');
@@ -127,6 +135,14 @@ class Wheen {
 
 		if (!this._integrated) {
 			window.requestAnimationFrame(() => this._update());
+		}
+
+		if (this._events && this._events['start']) {
+			if (this._events['start']['self']) {
+				this._events['start'].func.call(this._events['start']['self']);
+			} else {
+				this._events['start'].func();
+			}
 		}
 
 		return this;
@@ -149,6 +165,15 @@ class Wheen {
 		if (this._class) {
 			cc.Canvas.instance.node.removeComponent(this._class);
 		}
+
+		if (this._events && this._events['finish']) {
+			if (this._events['finish']['self']) {
+				this._events['finish'].func.call(this._events['finish']['self']);
+			} else {
+				this._events['finish'].func();
+			}
+		}
+
 		return this;
 	}
 
@@ -191,7 +216,7 @@ class Wheen {
 							if (!chain.org) {
 								chain.org = {};
 								for (let arg in chain.args) {
-									chain.org[arg] = this.target[arg];
+									chain.org[arg] = _get(this.target, arg);
 								}
 							}
 
@@ -201,9 +226,12 @@ class Wheen {
 								chain.elapsedTime += dt;
 							}
 
+							let args = {};
+
 							if (chain.elapsedTime >= chain.time) {
 								chain.elapsedTime = chain.time;
 								assign(this.target, chain.args);
+								assign(args, chain.args);
 								this._chainIndex++;
 							} else {
 								if (!chain.easing) {
@@ -212,10 +240,19 @@ class Wheen {
 
 								for (let arg in chain.args) {
 									if (chain.elapsedTime === chain.time) {
-										this.target[arg] = chain.args[arg];
+										_set(this.target, arg, _get(this.target, arg));
 									} else {
-										this.target[arg] = chain.easing(chain.elapsedTime, chain.org[arg], chain.args[arg] - chain.org[arg], chain.time);
+										_set(this.target, arg, chain.easing(chain.elapsedTime, chain.org[arg], chain.args[arg] - chain.org[arg], chain.time));
 									}
+									args[arg] = _get(this.target, arg);
+								}
+							}
+
+							if (this._events && this._events['update']) {
+								if (this._events['update']['self']) {
+									this._events['update'].func.call(this._events['update']['self'], args);
+								} else {
+									this._events['update'].func(args);
 								}
 							}
 						}
@@ -280,88 +317,88 @@ class Wheen {
 }
 
 Wheen.Easing = {
-	Linear: function(t, s, e, i) {
+	Linear: function (t, s, e, i) {
 		return (e * t) / i + s;
 	},
 	Quad: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return e * (t /= i) * t + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return -e * (t /= i) * (t - 2) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return (t /= i / 2) < 1 ? (e / 2) * t * t + s : (-e / 2) * (--t * (t - 2) - 1) + s;
 		}
 	},
 	Cubic: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return e * (t /= i) * t * t + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return e * ((t = t / i - 1) * t * t + 1) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return (t /= i / 2) < 1 ? (e / 2) * t * t * t + s : (e / 2) * ((t -= 2) * t * t + 2) + s;
 		}
 	},
 	Quart: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return e * (t /= i) * t * t * t + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return -e * ((t = t / i - 1) * t * t * t - 1) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return (t /= i / 2) < 1 ? (e / 2) * t * t * t * t + s : (-e / 2) * ((t -= 2) * t * t * t - 2) + s;
 		}
 	},
 	Quint: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return e * (t /= i) * t * t * t * t + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return e * ((t = t / i - 1) * t * t * t * t + 1) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return (t /= i / 2) < 1 ? (e / 2) * t * t * t * t * t + s : (e / 2) * ((t -= 2) * t * t * t * t + 2) + s;
 		}
 	},
 	Sine: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return -e * Math.cos((t / i) * (Math.PI / 2)) + e + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return e * Math.sin((t / i) * (Math.PI / 2)) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return (-e / 2) * (Math.cos((Math.PI * t) / i) - 1) + s;
 		}
 	},
 	Expo: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return 0 == t ? s : e * Math.pow(2, 10 * (t / i - 1)) + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return t == i ? s + e : e * (1 - Math.pow(2, (-10 * t) / i)) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return 0 == t ? s : t == i ? s + e : (t /= i / 2) < 1 ? (e / 2) * Math.pow(2, 10 * (t - 1)) + s : (e / 2) * (2 - Math.pow(2, -10 * --t)) + s;
 		}
 	},
 	Circ: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return -e * (Math.sqrt(1 - (t /= i) * t) - 1) + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return e * Math.sqrt(1 - (t = t / i - 1) * t) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return (t /= i / 2) < 1 ? (-e / 2) * (Math.sqrt(1 - t * t) - 1) + s : (e / 2) * (Math.sqrt(1 - (t -= 2) * t) + 1) + s;
 		}
 	},
 	Elastic: {
-		easeIn: function(t, s, e, i, n, h) {
+		easeIn: function (t, s, e, i, n, h) {
 			if (0 == t) return s;
 			if (1 == (t /= i)) return s + e;
 			if ((h || (h = 0.3 * i), !n || n < Math.abs(e))) {
@@ -370,7 +407,7 @@ Wheen.Easing = {
 			} else a = (h / (2 * Math.PI)) * Math.asin(e / n);
 			return -n * Math.pow(2, 10 * (t -= 1)) * Math.sin(((t * i - a) * (2 * Math.PI)) / h) + s;
 		},
-		easeOut: function(t, s, e, i, n, h) {
+		easeOut: function (t, s, e, i, n, h) {
 			if (0 == t) return s;
 			if (1 == (t /= i)) return s + e;
 			if ((h || (h = 0.3 * i), !n || n < Math.abs(e))) {
@@ -379,7 +416,7 @@ Wheen.Easing = {
 			} else a = (h / (2 * Math.PI)) * Math.asin(e / n);
 			return n * Math.pow(2, -10 * t) * Math.sin(((t * i - a) * (2 * Math.PI)) / h) + e + s;
 		},
-		easeInOut: function(t, s, e, i, n, h) {
+		easeInOut: function (t, s, e, i, n, h) {
 			if (0 == t) return s;
 			if (2 == (t /= i / 2)) return s + e;
 			if ((h || (h = i * (0.3 * 1.5)), !n || n < Math.abs(e))) {
@@ -392,38 +429,77 @@ Wheen.Easing = {
 		}
 	},
 	Back: {
-		easeIn: function(t, s, e, i, n) {
+		easeIn: function (t, s, e, i, n) {
 			return null == n && (n = 1.70158), e * (t /= i) * t * ((n + 1) * t - n) + s;
 		},
-		easeOut: function(t, s, e, i, n) {
+		easeOut: function (t, s, e, i, n) {
 			return null == n && (n = 1.70158), e * ((t = t / i - 1) * t * ((n + 1) * t + n) + 1) + s;
 		},
-		easeInOut: function(t, s, e, i, n) {
+		easeInOut: function (t, s, e, i, n) {
 			return null == n && (n = 1.70158), (t /= i / 2) < 1 ? (e / 2) * (t * t * ((1 + (n *= 1.525)) * t - n)) + s : (e / 2) * ((t -= 2) * t * ((1 + (n *= 1.525)) * t + n) + 2) + s;
 		}
 	},
 	Bounce: {
-		easeIn: function(t, s, e, i) {
+		easeIn: function (t, s, e, i) {
 			return e - Easing.Bounce.easeOut(i - t, 0, e, i) + s;
 		},
-		easeOut: function(t, s, e, i) {
+		easeOut: function (t, s, e, i) {
 			return (t /= i) < 1 / 2.75
 				? e * (7.5625 * t * t) + s
 				: t < 2 / 2.75
-				? e * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75) + s
-				: t < 2.5 / 2.75
-				? e * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375) + s
-				: e * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375) + s;
+					? e * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75) + s
+					: t < 2.5 / 2.75
+						? e * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375) + s
+						: e * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375) + s;
 		},
-		easeInOut: function(t, s, e, i) {
+		easeInOut: function (t, s, e, i) {
 			return t < i / 2 ? 0.5 * Easing.Bounce.easeIn(2 * t, 0, e, i) + s : 0.5 * Easing.Bounce.easeOut(2 * t - i, 0, e, i) + 0.5 * e + s;
 		}
 	}
 };
 
+function _set(target, attr, value) {
+	let levels = attr.split('.');
+	if (levels.length > 1 && target[levels[0]] !== undefined) {
+		let depth = 0;
+		let current = target;
+		while (depth < levels.length) {
+			current = current[levels[depth]];
+			depth++;
+			if (depth === levels.length - 1) {
+				current[levels[depth]] = value;
+			}
+		}
+	} else {
+		target[attr] = value;
+	}
+}
+
+function _get(target, attr) {
+	let levels = attr.split('.');
+	// console.log(levels);
+	if (levels.length > 1) {
+		let depth = 0;
+		let current = target;
+		while (depth < levels.length) {
+			current = current[levels[depth]];
+			if (current === undefined) {
+				return target[attr];
+			}
+			depth++;
+		}
+		console.log(current);
+		return current;
+	} else {
+		return target[attr];
+	}
+}
+
 // TODO: Use lodash .set function
 function assign(target, source) {
-	Object.assign(target, source);
+	for (let key in source) {
+		_set(target, key, source[key]);
+	}
 }
 
 if (typeof module !== 'undefined') {

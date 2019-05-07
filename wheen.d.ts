@@ -31,6 +31,15 @@ declare class Wheen {
 	to(args: any, time: number, easing?: EasingFunction): Wheen;
 
 	/**
+	 * event system
+	 * @param event event name
+	 * @param func function needs to be called
+	 * @param self caller
+	 * 
+	 */
+	on(event: 'start'|'finish'|'update', func: Function, self?: any): Wheen;
+
+	/**
 	 * wait a specific time
 	 * @param time target attributes
 	 */
