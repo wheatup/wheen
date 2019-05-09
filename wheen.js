@@ -209,6 +209,19 @@ class Wheen {
 						callImmediately = true;
 						break;
 					case 'to':
+						if (chain._time === undefined) {
+							if (typeof chain.time === 'object') {
+								let max = 0;
+								for (let arg in chain.time) {
+									if (chain.time[arg] > max) {
+										max = chain.time[arg];
+									}
+								}
+								chain._time = max;
+							} else {
+								chain._time = chain.time;
+							}
+						}
 						if (chain.time <= 0) {
 							assign(this.target, chain.args);
 							this._chainIndex++;
@@ -228,8 +241,8 @@ class Wheen {
 
 							let args = {};
 
-							if (chain.elapsedTime >= chain.time) {
-								chain.elapsedTime = chain.time;
+							if (chain.elapsedTime >= chain._time) {
+								chain.elapsedTime = chain._time;
 								assign(this.target, chain.args);
 								assign(args, chain.args);
 								this._chainIndex++;
@@ -239,10 +252,19 @@ class Wheen {
 								}
 
 								for (let arg in chain.args) {
-									if (chain.elapsedTime === chain.time) {
-										_set(this.target, arg, _get(this.target, arg));
+									let time = typeof chain.time === 'object' ? chain.time[arg] : chain._time;
+									if (chain.elapsedTime >= time) {
+										if(_get(this.target, arg) !== chain.args[arg]){
+											_set(this.target, arg, chain.args[arg]);
+										}
 									} else {
-										_set(this.target, arg, chain.easing(chain.elapsedTime, chain.org[arg], chain.args[arg] - chain.org[arg], chain.time));
+										let easing;
+										if (typeof chain.easing === 'object') {
+											easing = chain.easing[arg];
+										} else {
+											easing = chain.easing;
+										}
+										_set(this.target, arg, easing(chain.elapsedTime, chain.org[arg], chain.args[arg] - chain.org[arg], time));
 									}
 									args[arg] = _get(this.target, arg);
 								}

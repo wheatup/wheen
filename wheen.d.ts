@@ -28,7 +28,7 @@ declare class Wheen {
 	 * @param easing easing function
 	 * 
 	 */
-	to(args: any, time: number, easing?: EasingFunction): Wheen;
+	to(args: any, time: number|object, easing?: EasingFunction|object): Wheen;
 
 	/**
 	 * event system

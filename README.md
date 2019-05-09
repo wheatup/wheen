@@ -8,6 +8,99 @@ Even possible to tween nested attributes!
 
 ### Usage
 
+#### Simple
+
+```javascript
+const obj = {x: 0, y: 0};
+new Wheen(obj)
+	.to({x: 10, y: 20}, 1000)		// x to 10, y to 20 after 1 second
+	.start();
+```
+
+#### Delay
+
+```javascript
+const obj = {x: 0, y: 0};
+new Wheen(obj)
+	.wait(1000)						// wait 1 second first
+	.to({x: 10, y: 20}, 1000)		// x to 10, y to 20 after 1 second
+	.start();
+```
+
+#### From Attributes
+
+```javascript
+const obj = {x: 0, y: 0};
+new Wheen(obj)
+	.from({x: -10})					// set x to -10 as soon as the wheen is started
+	.to({x: 10, y: 20}, 1000)		// x to 10, y to 20 after 1 second
+	.start();
+```
+
+#### Call Function
+
+```javascript
+const obj = {x: 0, y: 0};
+new Wheen(obj)
+	.to({x: 10, y: 20}, 1000)						// x to 10, y to 20 after 1 second
+	.callFunc(()=>{ console.log('Finished!') })		// call this function while approaching this point
+	.start();
+```
+
+#### Loop
+
+```javascript
+const obj = {x: 0, y: 0};
+new Wheen(obj)
+	.to({x: 10, y: 20}, 1000)				// x to 10, y to 20 after 1 second
+	.to({x: 0, y: 0}, 1000)					// x to 0, y to 0 after 1 second
+	.loop(3)			// loop the whole wheen for 3 times
+	.start();
+```
+
+#### Easing
+
+```javascript
+const obj = {x: 0, y: 0};
+
+new Wheen(obj)
+	.to({x: 10, y: 20}, 1000, Wheen.Easing.Cubic.easeOut)		// x to 10, y to 20 after 1 second using cubic easing out function
+	.start();
+```
+
+#### Nested Attributes
+
+```javascript
+const obj = { 
+	x: 0, 
+	y: 0, 
+	child: { 
+		x: 0, 
+		y: 0 
+	} 
+};
+
+new Wheen(obj)
+	.to({x: 10, 'child.x': 20}, 1000)		// x to 10, x of it's child to 20 after 1 second
+	.start();
+```
+
+
+#### Differentiate Assignment
+
+```javascript
+const obj = {x: 0, y: 0};
+
+new Wheen(obj)
+	.to(
+		{x: 10, y: 20}, 				// x to 10, y to 20
+		{x: 1000, y: 2000}				// x finish after 1 second, y finish after 2 seconds
+		{x: Wheen.Easing.Back.easeOut, y: Wheen.Easing.Linear})		// x using back easing out function, y using linear easing function
+	.start();
+```
+
+#### Full Usage
+
 ```javascript
 const obj = {x: 0, y: 0, scaleX: 1, scaleY: 1};
 
