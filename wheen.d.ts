@@ -2,6 +2,8 @@ declare interface EasingFunction{
 
 }
 
+
+
 declare class Wheen {
 	/**
 	 * create a new animation with given target.
@@ -93,6 +95,12 @@ declare class Wheen {
 	static stop(target: any);
 
 	/**
+	 * create a new animation with given target.
+	 * @param target target
+	 */
+	static get(target?: any): Wheen;
+
+	/**
 	 * start all animations from an object
 	 * @param target target
 	 */
@@ -174,3 +182,9 @@ declare class Wheen {
 		}
 	}
 }
+
+/**
+ * create a new animation with given target.
+ * @param target target
+ */
+declare function wheen(target?: any): Wheen;

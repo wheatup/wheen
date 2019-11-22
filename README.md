@@ -97,6 +97,20 @@ new Wheen(obj)
 	.start();
 ```
 
+
+#### Events
+
+```javascript
+const obj = {x: 0, y: 0};
+
+wheen(obj)
+	.to({x: 10}, 1000, Wheen.Easing.Linear)
+	.on('start', ()=> console.log('Tween start'));
+	.on('update', e => console.log('Tween update', e));
+	.on('finish', ()=> console.log('Tween end'));
+	.start();
+```
+
 #### Full Usage
 
 ```javascript
