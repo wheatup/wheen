@@ -83,8 +83,8 @@ class Wheen {
 		return this;
 	}
 
-	to(args, time, easing) {
-		let chain = { args, time, easing, type: 'to' };
+	to(args, time, easing, postFunc) {
+		let chain = { args, time, easing, type: 'to', postFunc };
 		this._tweenChain.push(chain);
 		return this;
 	}
@@ -515,6 +515,10 @@ function _get(target, attr) {
 		return target[attr];
 	}
 }
+
+var wheen = (...args) => new Wheen(...args); 
+
+Wheen.get = wheen;
 
 // TODO: Use lodash .set function
 function assign(target, source) {
