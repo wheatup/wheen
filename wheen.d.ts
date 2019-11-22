@@ -61,12 +61,20 @@ declare class Wheen {
 	loop(count?: number, flag?: string|number|symbol): Wheen;
 
 	/**
-	 * call a function
+	 * call a function(alias for invoke)
 	 * @param func the function need to be called
 	 * @param self this context
 	 * @param args arguments
 	 */
 	callFunc(func: Function, self?: any, ...args: any): Wheen;
+
+	/**
+	 * call a function
+	 * @param func the function need to be called
+	 * @param self this context
+	 * @param args arguments
+	 */
+	invoke(func: Function, self?: any, ...args: any): Wheen;
 
 	/**
 	 * start the animation

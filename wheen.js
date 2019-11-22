@@ -109,6 +109,10 @@ class Wheen {
 		return this;
 	}
 
+	invoke(func, self, ...args) {
+		return this.callFunc(func, self, ...args);
+	}
+
 	on(event, func, self) {
 		if (!this._events) {
 			this._events = {};
