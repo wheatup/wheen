@@ -3,7 +3,7 @@ declare class WheenChain {
 	 * set the starting point.
 	 * @param args attributes for starting point
 	 */
-	from(args: any): Wheen;
+	from(args: any): WheenChain;
 
 	/**
 	 * lerp to given attributes
@@ -13,7 +13,7 @@ declare class WheenChain {
 	 * @param options options
 	 * 
 	 */
-	to(args: any, time: number | object, easing?: EasingFunction | object, options?: object): Wheen;
+	to(args: any, time: number | object, easing?: EasingFunction | object, options?: object): WheenChain;
 
 	/**
 	 * lerp to given attributes based on real-time values
@@ -23,7 +23,7 @@ declare class WheenChain {
 	 * @param options options
 	 * 
 	 */
-	by(args: any, time: number | object, easing?: EasingFunction | object, options?: object): Wheen;
+	by(args: any, time: number | object, easing?: EasingFunction | object, options?: object): WheenChain;
 
 	/**
 	 * event system
@@ -33,26 +33,26 @@ declare class WheenChain {
 	 * @param args extra arguments
 	 * 
 	 */
-	on(event: 'start' | 'finish' | 'update', func: Function, self?: any, ...args?: any): Wheen;
+	on(event: 'start' | 'finish' | 'update', func: Function, self?: any, ...args?: any): WheenChain;
 
 	/**
 	 * wait a specific time
 	 * @param delay target attributes
 	 */
-	wait(delay: number): Wheen;
+	wait(delay: number): WheenChain;
 
 	/**
 	 * set a flag for looping
 	 * @param flag flag name
 	 */
-	setFlag(flag: string | number | symbol): Wheen;
+	setFlag(flag: string | number | symbol): WheenChain;
 
 	/**
 	 * loop animation
 	 * @param count loop count, if less or equal 0, it's infinite
 	 * @param flag flag name
 	 */
-	loop(count?: number, flag?: string | number | symbol): Wheen;
+	loop(count?: number, flag?: string | number | symbol): WheenChain;
 
 	/**
 	 * call a function
@@ -60,27 +60,27 @@ declare class WheenChain {
 	 * @param self this context
 	 * @param args arguments
 	 */
-	invoke(func: Function, self?: any, ...args: any): Wheen;
+	invoke(func: Function, self?: any, ...args: any): WheenChain;
 
 	/**
 	 * start the animation
 	 */
-	start();
+	start(): WheenChain;
 
 	/**
 	 * pause the animation
 	 */
-	pause();
+	pause(): WheenChain;
 
 	/**
 	 * resume the animation
 	 */
-	resume();
+	resume(): WheenChain;
 
 	/**
 	 * stop the animation
 	 */
-	stop();
+	stop(): WheenChain;
 }
 
 declare class Wheen {

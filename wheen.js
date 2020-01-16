@@ -167,10 +167,12 @@ var wheen = (window => {
 
 		pause() {
 			this.paused = true;
+			return this;
 		}
 
 		resume() {
 			this.paused = false;
+			return this;
 		}
 
 		_nextNode() {
