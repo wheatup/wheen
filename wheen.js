@@ -283,7 +283,7 @@ var wheen = (window => {
 						snap(value, snapshot[key], target[key])
 					} else {
 						if (getter) {
-							snapshot[key] = getter(target[key]);
+							snapshot[key] = getter(target[key], key);
 						} else {
 							snapshot[key] = target[key];
 						}
@@ -324,7 +324,7 @@ var wheen = (window => {
 					const targetValue = this.type === 'BY' ? snapshot[key] + args[key] : args[key];
 					const computedValue = easing(this.elapsedTime, startValue, targetValue - startValue, this.delay);
 					if (setter) {
-						target[key] = setter(computedValue);
+						target[key] = setter(computedValue, key);
 					} else {
 						target[key] = computedValue;
 					}
