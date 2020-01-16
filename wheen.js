@@ -229,7 +229,6 @@ var wheen = (window => {
 		}
 
 		start() {
-			console.log(this.type);
 			if (this.type === 'SET_FLAG') {
 				this.finished = true;
 			} else if (this.type === 'INVOKE') {
