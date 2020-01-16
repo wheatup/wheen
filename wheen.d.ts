@@ -10,24 +10,36 @@ declare class WheenChain {
 	 * @param args target attributes
 	 * @param time total time, milliseconds
 	 * @param easing easing function
+	 * @param options options
 	 * 
 	 */
 	to(args: any, time: number | object, easing?: EasingFunction | object, options?: object): Wheen;
+
+	/**
+	 * lerp to given attributes based on real-time values
+	 * @param args target attributes
+	 * @param time total time, milliseconds
+	 * @param easing easing function
+	 * @param options options
+	 * 
+	 */
+	by(args: any, time: number | object, easing?: EasingFunction | object, options?: object): Wheen;
 
 	/**
 	 * event system
 	 * @param event event name
 	 * @param func function needs to be called
 	 * @param self caller
+	 * @param args extra arguments
 	 * 
 	 */
 	on(event: 'start' | 'finish' | 'update', func: Function, self?: any, ...args?: any): Wheen;
 
 	/**
 	 * wait a specific time
-	 * @param time target attributes
+	 * @param delay target attributes
 	 */
-	wait(time: number): Wheen;
+	wait(delay: number): Wheen;
 
 	/**
 	 * set a flag for looping
@@ -164,5 +176,6 @@ declare class Wheen {
 /**
  * create a new animation with given target.
  * @param target target
+ * @param options extra options
  */
-declare function wheen(target?: any): WheenChain;
+declare function wheen(target: any, options?: object): WheenChain;
