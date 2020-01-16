@@ -1,21 +1,9 @@
-declare interface EasingFunction{
-
-}
-
-
-
 declare class Wheen {
 	/**
 	 * create a new animation with given target.
 	 * @param target target
 	 */
 	constructor(target?: any);
-
-	/**
-	 * apply the animation to the target.
-	 * @param target target
-	 */
-	apply(target: any): Wheen;
 
 	/**
 	 * set the starting point.
@@ -30,7 +18,7 @@ declare class Wheen {
 	 * @param easing easing function
 	 * 
 	 */
-	to(args: any, time: number|object, easing?: EasingFunction|object): Wheen;
+	to(args: any, time: number|object, easing?: EasingFunction|object, options?: object): Wheen;
 
 	/**
 	 * event system
@@ -39,7 +27,7 @@ declare class Wheen {
 	 * @param self caller
 	 * 
 	 */
-	on(event: 'start'|'finish'|'update', func: Function, self?: any): Wheen;
+	on(event: 'start'|'finish'|'update', func: Function, self?: any, ...args?: any): Wheen;
 
 	/**
 	 * wait a specific time
@@ -59,14 +47,6 @@ declare class Wheen {
 	 * @param flag flag name
 	 */
 	loop(count?: number, flag?: string|number|symbol): Wheen;
-
-	/**
-	 * call a function(alias for invoke)
-	 * @param func the function need to be called
-	 * @param self this context
-	 * @param args arguments
-	 */
-	callFunc(func: Function, self?: any, ...args: any): Wheen;
 
 	/**
 	 * call a function
@@ -101,12 +81,6 @@ declare class Wheen {
 	 * @param target target
 	 */
 	static stop(target: any);
-
-	/**
-	 * create a new animation with given target.
-	 * @param target target
-	 */
-	static get(target?: any): Wheen;
 
 	/**
 	 * start all animations from an object

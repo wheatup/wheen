@@ -78,7 +78,12 @@ const obj = {
 };
 
 new Wheen(obj)
-	.to({x: 10, 'child.x': 20}, 1000)		// lerp x to 10, x of it's child to 20 after 1 second
+	.to({
+		x: 10, 
+		child: {
+			x: 20
+		}
+	}, 1000)		// lerp x to 10, x of it's child to 20 after 1 second
 	.start();
 ```
 
@@ -91,8 +96,26 @@ const obj = {x: 0, y: 0};
 new Wheen(obj)
 	.to(
 		{x: 10, y: 20}, 						// lerp x to 10, y to 20
-		{x: 1000, y: 2000}						// x finish after 1 second, y finish after 2 seconds
+		1000
 		{x: Wheen.Easing.Back.easeOut, y: Wheen.Easing.Linear}	// x using back easing out function, y using linear easing function
+	)		
+	.start();
+```
+
+#### Pre-assign methods
+
+```javascript
+const box = document.getElementById('box');
+
+new Wheen(obj)
+	.to(
+		{ marginLeft: 200 }
+		1000
+		Wheen.Easing.Linear,
+		{
+			get: value => value.replace('px', ''),			// While getting the value, get rid of the 'px'
+			set: value => value + 'px'						// While setting the value, put a 'px' at the end of the value
+		}
 	)		
 	.start();
 ```
@@ -106,7 +129,7 @@ const obj = {x: 0, y: 0};
 wheen(obj)
 	.to({x: 10}, 1000, Wheen.Easing.Linear)
 	.on('start', ()=> console.log('Tween start'));
-	.on('update', e => console.log('Tween update', e));
+	.on('update', () => console.log('Tween update'));
 	.on('finish', ()=> console.log('Tween end'));
 	.start();
 ```
@@ -140,8 +163,6 @@ let wheen = new Wheen(obj)
 	.to({scaleX: 1, scaleY: 1}, 50, Wheen.Easing.Cubic.easeOut)
 	// Loop from 'START' point, twice
 	.loop(2, 'START')
-	// Calls every frame while the tween is running
-	.on('update', args => console.log('Current args', args))
 	// Finish callback
 	.on('finish', function(){ console.log(`Finished at ${this.x}!`); }, obj)
 	
