@@ -9,17 +9,22 @@ var wheen = (window => {
 
 	const initiate = () => {
 		if (typeof cc !== 'undefined' && cc.ENGINE_VERSION) {
-			if (cc.Canvas.instance) {
-				try {
-					cc.Canvas.instance.node.addComponent(cc.Class({
-						extends: cc.Component,
-						update: dt => update(dt * 1000)
-					}));
-					initiated = true;
-					console.log('Wheen has been successfully intergrated with Cocos Creator, enjoy!');
-				} catch (ex) {
-					console.error(ex);
-				}
+			try {
+				const clazz = cc.Class({
+					name: 'Wheen',
+					extends: cc.Component,
+					update: dt => update(dt * 1000)
+				});
+
+				cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, evt => {
+					if (!evt.children[0].getComponent('Wheen')) {
+						evt.children[0].addComponent(clazz);
+						initiated = true;
+						console.log('Wheen injected!');
+					}
+				});
+			} catch (ex) {
+				console.error(ex);
 			}
 		} else {
 			let lastUpdateTime = new Date().getTime();
