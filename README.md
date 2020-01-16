@@ -12,7 +12,7 @@ Even possible to tween nested attributes!
 
 ```javascript
 const obj = {x: 0, y: 0};
-new Wheen(obj)
+wheen(obj)
 	.to({x: 10, y: 20}, 1000)		// lerp x to 10, y to 20 after 1 second
 	.start();
 ```
@@ -21,7 +21,7 @@ new Wheen(obj)
 
 ```javascript
 const obj = {x: 0, y: 0};
-new Wheen(obj)
+wheen(obj)
 	.wait(1000)				// wait 1 second first
 	.to({x: 10, y: 20}, 1000)		// lerp x to 10, y to 20 after 1 second
 	.start();
@@ -31,7 +31,7 @@ new Wheen(obj)
 
 ```javascript
 const obj = {x: 0, y: 0};
-new Wheen(obj)
+wheen(obj)
 	.from({x: -10})				// set x to -10 as soon as the wheen is started
 	.to({x: 10, y: 20}, 1000)		// lerp x to 10, y to 20 after 1 second
 	.start();
@@ -41,7 +41,7 @@ new Wheen(obj)
 
 ```javascript
 const obj = {x: 0, y: 0};
-new Wheen(obj)
+wheen(obj)
 	.to({x: 10, y: 20}, 1000)				// lerp x to 10, y to 20 after 1 second
 	.callFunc(()=>{ console.log('Finished!') })		// call this function while approaching this point
 	.start();
@@ -51,7 +51,7 @@ new Wheen(obj)
 
 ```javascript
 const obj = {x: 0, y: 0};
-new Wheen(obj)
+wheen(obj)
 	.to({x: 10, y: 20}, 1000)		// lerp x to 10, y to 20 after 1 second
 	.to({x: 0, y: 0}, 1000)			// lerp x to 0, y to 0 after 1 second
 	.loop(3)				// loop the whole wheen for 3 times
@@ -63,7 +63,7 @@ new Wheen(obj)
 ```javascript
 const obj = {x: 0, y: 0};
 
-new Wheen(obj)
+wheen(obj)
 	.to({x: 10, y: 20}, 1000, Wheen.Easing.Cubic.easeOut)		// lerp x to 10, y to 20 after 1 second using cubic easing out function
 	.start();
 ```
@@ -77,7 +77,7 @@ const obj = {
 	child: {x: 0, y: 0} 
 };
 
-new Wheen(obj)
+wheen(obj)
 	.to({
 		x: 10, 
 		child: {
@@ -93,7 +93,7 @@ new Wheen(obj)
 ```javascript
 const obj = {x: 0, y: 0};
 
-new Wheen(obj)
+wheen(obj)
 	.to(
 		{x: 10, y: 20}, 						// lerp x to 10, y to 20
 		1000
@@ -107,7 +107,7 @@ new Wheen(obj)
 ```javascript
 const box = document.getElementById('box');
 
-new Wheen(obj)
+wheen(obj)
 	.to(
 		{ marginLeft: 200 }
 		1000
@@ -140,7 +140,7 @@ wheen(obj)
 const obj = {x: 0, y: 0, scaleX: 1, scaleY: 1};
 
 // Create new wheen
-let wheen = new Wheen(obj)
+let w = wheen(obj)
 	// Set the starting point(optional)
 	.from({x: 0, y: 0, scaleX: 1, scaleY: 1})
 	// Move to (50, 0) in 1 second
@@ -167,10 +167,10 @@ let wheen = new Wheen(obj)
 	.on('finish', function(){ console.log(`Finished at ${this.x}!`); }, obj)
 	
 // Start the animation
-wheen.start();
+w.start();
 
 // Pause the animation
-wheen.pause();
+w.pause();
 
 // Resume all the animation on an object
 Wheen.resume(obj);

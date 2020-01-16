@@ -1,10 +1,4 @@
-declare class Wheen {
-	/**
-	 * create a new animation with given target.
-	 * @param target target
-	 */
-	constructor(target?: any);
-
+declare class WheenChain {
 	/**
 	 * set the starting point.
 	 * @param args attributes for starting point
@@ -18,7 +12,7 @@ declare class Wheen {
 	 * @param easing easing function
 	 * 
 	 */
-	to(args: any, time: number|object, easing?: EasingFunction|object, options?: object): Wheen;
+	to(args: any, time: number | object, easing?: EasingFunction | object, options?: object): Wheen;
 
 	/**
 	 * event system
@@ -27,7 +21,7 @@ declare class Wheen {
 	 * @param self caller
 	 * 
 	 */
-	on(event: 'start'|'finish'|'update', func: Function, self?: any, ...args?: any): Wheen;
+	on(event: 'start' | 'finish' | 'update', func: Function, self?: any, ...args?: any): Wheen;
 
 	/**
 	 * wait a specific time
@@ -39,14 +33,14 @@ declare class Wheen {
 	 * set a flag for looping
 	 * @param flag flag name
 	 */
-	setFlag(flag: string|number|symbol): Wheen;
+	setFlag(flag: string | number | symbol): Wheen;
 
 	/**
 	 * loop animation
 	 * @param count loop count, if less or equal 0, it's infinite
 	 * @param flag flag name
 	 */
-	loop(count?: number, flag?: string|number|symbol): Wheen;
+	loop(count?: number, flag?: string | number | symbol): Wheen;
 
 	/**
 	 * call a function
@@ -75,29 +69,31 @@ declare class Wheen {
 	 * stop the animation
 	 */
 	stop();
+}
 
+declare class Wheen {
 	/**
-	 * stop all animations from an object
-	 * @param target target
-	 */
+	* stop all animations from an object
+	* @param target target
+	*/
 	static stop(target: any);
 
 	/**
-	 * start all animations from an object
-	 * @param target target
-	 */
+	* start all animations from an object
+	* @param target target
+	*/
 	static start(target: any);
 
 	/**
-	 * pause all animations from an object
-	 * @param target target
-	 */
+	* pause all animations from an object
+	* @param target target
+	*/
 	static pause(target: any);
 
 	/**
-	 * resume all animations from an object
-	 * @param target target
-	 */
+	* resume all animations from an object
+	* @param target target
+	*/
 	static resume(target: any);
 
 	static Easing: {
@@ -169,4 +165,4 @@ declare class Wheen {
  * create a new animation with given target.
  * @param target target
  */
-declare function wheen(target?: any): Wheen;
+declare function wheen(target?: any): WheenChain;
