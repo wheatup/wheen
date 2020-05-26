@@ -43,7 +43,7 @@ wheen(obj)
 const obj = {x: 0, y: 0};
 wheen(obj)
 	.to({x: 10, y: 20}, 1000)				// lerp x to 10, y to 20 after 1 second
-	.callFunc(()=>{ console.log('Finished!') })		// call this function while approaching this point
+	.invoke(()=>{ console.log('Finished!') })		// call this function while approaching this point
 	.start();
 ```
 
@@ -109,7 +109,11 @@ const box = document.getElementById('box');
 
 wheen(obj)
 	.to(
-		{ marginLeft: 200 }
+		{ 
+			style: {
+				marginLeft: 200
+			} 
+		},
 		1000
 		Wheen.Easing.Linear,
 		{
@@ -154,7 +158,7 @@ let w = wheen(obj)
 	// Jump to the air
 	.to({y: 500}, 1000, Wheen.Easing.Cubic.easeOut)
 	// Make a function call
-	.callFunc(()=>{console.log("I'm on the air!")})
+	.invoke(()=>{console.log("I'm on the air!")})
 	// Fall down
 	.to({y: 0}, 1000, Wheen.Easing.Cubic.easeIn)
 	// Compress

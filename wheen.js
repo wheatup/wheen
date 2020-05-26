@@ -523,3 +523,7 @@ var Wheen = {
 		}
 	}
 };
+
+if (typeof module !== 'undefined') {
+	module.exports = { Wheen, wheen };
+}
