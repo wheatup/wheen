@@ -525,5 +525,9 @@ export const Wheen = {
 };
 
 if (typeof module !== 'undefined') {
-	module.exports = { Wheen, wheen };
+	try {
+		module.exports = { Wheen, wheen };
+	} catch (ex) {
+
+	}
 }
