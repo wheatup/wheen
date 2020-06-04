@@ -285,7 +285,7 @@ const wheen = (window => {
 				Object.entries(args).forEach(([key, value]) => {
 					if (typeof value === 'object') {
 						snapshot[key] = {};
-						snap(value, snapshot[key], target[key])
+						snap(value, snapshot[key], target[key], getter)
 					} else {
 						if (getter) {
 							snapshot[key] = getter(target[key], key);
@@ -525,5 +525,9 @@ const Wheen = {
 };
 
 if (typeof module !== 'undefined') {
-	module.exports = { Wheen, wheen };
+	try {
+		module.exports = { Wheen, wheen };
+	} catch (ex) {
+
+	}
 }
