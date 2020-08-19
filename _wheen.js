@@ -1,6 +1,6 @@
 const wheens = new Map();
 
-const wheen = (window => {
+export const wheen = (window => {
 	let initiated = false;
 
 	const update = dt => {
@@ -355,7 +355,7 @@ const wheen = (window => {
 
 })(window);
 
-const Wheen = {
+export const Wheen = {
 	Easing: {
 		Linear: function (t, s, e, i) {
 			return (e * t) / i + s;
